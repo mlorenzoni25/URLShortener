@@ -1,0 +1,14 @@
+{
+  "name": "urlshortener",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "Michele Lorenzoni",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "3.5.3"
+  }
+}
