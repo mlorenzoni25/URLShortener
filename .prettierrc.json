@@ -10,7 +10,7 @@
   "jsxSingleQuote": true,
   "trailingComma": "all",
   "bracketSpacing": true,
-  "objectWrap": "collapse",
+  "objectWrap": "preserve",
   "bracketSameLine": false,
   "arrowParens": "always",
   "requirePragma": false,
