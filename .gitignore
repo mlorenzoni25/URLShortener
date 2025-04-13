@@ -139,3 +139,6 @@ dist
 .pnp.*
 
 .DS_Store
+
+# Custom
+.private
