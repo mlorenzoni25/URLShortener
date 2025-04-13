@@ -1,0 +1,25 @@
+{
+  "extends": ["@commitlint/config-conventional"],
+  "formatter": "@commitlint/format",
+  "rules": {
+    "type-enum": [2, "always", [
+      "BUILD",
+      "CI",
+      "CHORE",
+      "DOCS",
+      "FEAT",
+      "FIX",
+      "PERF",
+      "REFACTOR",
+      "REVERT",
+      "STYLE",
+      "TEST"
+    ]],
+    "type-case": [2, "always", ["uppercase", "upper-case"]],
+    "type-empty": [2, "never"],
+    "scope-case": [2, "always", ["uppercase", "upper-case"]],
+    "subject-case": [2, "always", ["lowercase", "lowerCase", "lower-case"]],
+    "subject-empty": [2, "never"],
+    "subject-full-stop": [2, "never", "."]
+  }
+}
