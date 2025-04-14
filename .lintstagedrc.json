@@ -1,3 +1,4 @@
 {
-  "./src/*.{ts,js,mts,mjs}": ["prettier --write", "eslint --fix", "eslint"]
+  "src/*.{ts,js,mts,mjs}": ["prettier --write", "eslint --fix", "eslint"],
+  "package.json": ["npx sort-package-json --write"]
 }
