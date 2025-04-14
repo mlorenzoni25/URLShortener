@@ -6,15 +6,18 @@
   "author": "Michele Lorenzoni",
   "type": "module",
   "scripts": {
+    "build": "tsc",
+    "dev": "tsx --watch --env-file .env src/server.ts",
+    "dev:prod": "tsx --watch --env-file .env.production src/index.ts",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint": "eslint . --ext .ts --fix",
     "lint-staged": "lint-staged",
-    "prepare": "husky"
+    "prepare": "husky",
+    "start": "tsx --watch --env-file .env src/"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "helmet": "^8.1.0"
   },
@@ -35,6 +38,7 @@
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
     "sort-package-json": "^3.0.0",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.1"
   }
