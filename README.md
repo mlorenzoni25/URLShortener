@@ -33,16 +33,53 @@ A robust URL shortening service built with Node.js, Express, TypeScript, and AWS
 ```
 URLShortener/
 ├── .husky
+│   ├── commit-msg
+│   └── pre-commit
+├── src
+│   ├── app.ts
+│   ├── constants.ts
+│   ├── database.ts
+│   ├── logger.ts
+│   ├── server.ts
+│   ├── config
+│   │   ├── app.conf.ts
+│   │   ├── db.conf.ts
+│   │   └── logger.conf.ts
+│   ├── controllers
+│   │   └── user.controller.ts
+│   ├── helpers
+│   │   ├── http.helper.ts
+│   │   ├── security.helper.ts
+│   │   └── string.helper.ts
+│   ├── mappers
+│   │   └── user.mapper.ts
+│   ├── middlewares
+│   │   ├── error-handler.middleware.ts
+│   │   └── user.middleware.ts
+│   ├── models
+│   │   ├── config.model.ts
+│   │   ├── response.model.ts
+│   │   └── user.model.ts
+│   ├── routes
+│   │   └── api.route.ts
+│   ├── schema
+│   │   ├── common.schema.ts
+│   │   └── user.schema.ts
+│   └── services
+│       └── user.service.ts
 ├── .commitlintrc.json
+├── .env
+├── .env.example
+├── .env.production
 ├── .gitignore
 ├── .lintstagedrc.json
 ├── .prettierignore
 ├── .prettierrc.json
-├── eslint.config.mjs
 ├── LICENSE
+├── README.md
+├── eslint.config.mjs
 ├── package-lock.json
 ├── package.json
-├── README.md
 └── tsconfig.json
 ```
 
