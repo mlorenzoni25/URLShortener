@@ -5,6 +5,7 @@ import { pinoHttp } from "pino-http";
 import { config } from "./config/app.conf.js";
 import logger from "./logger.js";
 import errorHandler from "./middlewares/error-handler.middleware.js";
+import apiRouter from "./routes/api.route.js";
 
 const app = express();
 
@@ -71,6 +72,9 @@ app
       methods: ["GET", "POST"],
     }),
   );
+
+// api router
+app.use("/api", apiRouter);
 
 // middleware to handle errors
 app.use(errorHandler);
