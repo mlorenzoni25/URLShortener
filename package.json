@@ -19,7 +19,9 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "helmet": "^8.1.0"
+    "helmet": "^8.1.0",
+    "pino": "^9.6.0",
+    "pino-http": "^10.4.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
@@ -28,6 +30,8 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/node": "^22.14.1",
+    "@types/pino": "^7.0.4",
+    "@types/pino-http": "^5.8.4",
     "@typescript-eslint/eslint-plugin": "^8.29.1",
     "@typescript-eslint/parser": "^8.29.1",
     "eslint": "^9.24.0",
@@ -36,6 +40,7 @@
     "eslint-plugin-jsdoc": "^50.6.9",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
+    "pino-pretty": "^13.0.0",
     "prettier": "^3.5.3",
     "sort-package-json": "^3.0.0",
     "tsx": "^4.19.3",
