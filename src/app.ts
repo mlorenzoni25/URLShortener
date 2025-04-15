@@ -1,13 +1,17 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import { pinoHttp } from "pino-http";
 import { config } from "./config/app.conf.js";
+import logger from "./logger.js";
 
 const app = express();
 
 app
   .use(express.urlencoded({ extended: true }))
   .use(express.json())
+  // logging
+  .use(pinoHttp({ logger }))
   // security conf
   .disable("x-powered-by")
   .use(
