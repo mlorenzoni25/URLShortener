@@ -4,6 +4,7 @@ import helmet from "helmet";
 import { pinoHttp } from "pino-http";
 import { config } from "./config/app.conf.js";
 import logger from "./logger.js";
+import errorHandler from "./middlewares/error-handler.middleware.js";
 
 const app = express();
 
@@ -70,5 +71,8 @@ app
       methods: ["GET", "POST"],
     }),
   );
+
+// middleware to handle errors
+app.use(errorHandler);
 
 export default app;
