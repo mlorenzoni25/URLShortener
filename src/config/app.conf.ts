@@ -4,6 +4,8 @@ import { Config, Environment } from "../models/config.model.js";
 const defaultConfig: Config = {
   environment: Environment.PRODUCTION,
   port: 3000,
+  awsProfile: "",
+  awsRegion: "",
 };
 
 /**
@@ -27,12 +29,33 @@ const parsePort = (value?: string): number => {
   return !isNaN(parsed) && parsed > 0 && parsed < 65536 ? parsed : defaultConfig.port;
 };
 
+/**
+ * Parse the config's param `awsProfile`
+ * @param {string | undefined} value param's value
+ * @returns {number} parsed param's value
+ */
+const parseAWSProfile = (value?: string): string => {
+  return value || defaultConfig.awsProfile;
+};
+
+/**
+ * Parse the config's param `awsRegion`
+ * @param {string | undefined} value param's value
+ * @returns {number} parsed param's value
+ */
+const parseAWSRegion = (value?: string): string => {
+  return value || defaultConfig.awsRegion;
+};
+
 // application's config
 export const config: Config = {
   // environment
   environment: parseEnvironment(process.env.ENVIRONMENT),
   // server
   port: parsePort(process.env.PORT),
+  // aws
+  awsProfile: parseAWSProfile(process.env.AWS_PROFILE),
+  awsRegion: parseAWSRegion(process.env.AWS_REGION),
 };
 
 /**
