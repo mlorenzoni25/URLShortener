@@ -17,11 +17,16 @@
     "start": "tsx --watch --env-file .env src/"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.788.0",
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "dynamoose": "^4.0.4",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
     "pino": "^9.6.0",
-    "pino-http": "^10.4.0"
+    "pino-http": "^10.4.0",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
