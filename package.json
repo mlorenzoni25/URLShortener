@@ -23,6 +23,7 @@
     "dynamoose": "^4.0.4",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
     "pino": "^9.6.0",
     "pino-http": "^10.4.0",
     "uuid": "^11.1.0",
