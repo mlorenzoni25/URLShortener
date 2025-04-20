@@ -19,3 +19,19 @@ export const generateHashedPassword = (plainText: string, rounds = 12): Promise<
 export const comparePassword = (plainText: string, hash: string): Promise<boolean> => {
   return bcrypt.compare(plainText, hash);
 };
+
+/**
+ * Strip token's prefix
+ * @param {string} token token to clean
+ * @param {string} prefix prefix to strip
+ * @returns {string} stripped token
+ */
+export const cleanAuthToken = (token: string, prefix: string): string => {
+  // remove the prefix if the token starts with it
+  if (token.startsWith(prefix)) {
+    token = token.substring(prefix.length);
+  }
+
+  // remove the whitespace from the token
+  return token.trim();
+};

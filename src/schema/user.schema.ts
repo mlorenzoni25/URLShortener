@@ -20,4 +20,8 @@ export const RegisterUserRequestSchema = z
     return isEquals;
   }, "Password and confirm password do not match.");
 
+// validation schema of `loginUser` controller
+export const LoginRequestSchema = z.object({ username: usernameSchema, password: passwordSchema });
+
 export type RegisterUserRequest = z.infer<typeof RegisterUserRequestSchema>;
+export type LoginRequest = z.infer<typeof LoginRequestSchema>;

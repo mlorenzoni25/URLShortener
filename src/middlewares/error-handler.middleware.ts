@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import HTTPError from "../exception/http.exception.js";
 import { ErrorBaseResponse } from "../models/response.model.js";
 
 /**
@@ -18,6 +19,19 @@ const errorHandler = (err: Error, req: Request, res: Response, __: NextFunction)
       messages: ["Generic error"],
     },
   };
+
+  // handle custom exceptions
+  if (err instanceof HTTPError) {
+    response.error.code = err.statusCode;
+    response.error.messages = err.responseErrorMessages;
+
+    // if there are debug message I print them
+    if (err.debugErrorMessages && err.debugErrorMessages.length) {
+      err.debugErrorMessages.forEach((debugErrorMessage) => {
+        req.log.debug(debugErrorMessage);
+      });
+    }
+  }
 
   // log the error
   req.log.error(err);
