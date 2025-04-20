@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import HTTPError from "../exception/http.exception.js";
+import ValidationError from "../exception/validation.exception.js";
 import { ErrorBaseResponse } from "../models/response.model.js";
 
 /**
@@ -24,6 +25,11 @@ const errorHandler = (err: Error, req: Request, res: Response, __: NextFunction)
   if (err instanceof HTTPError) {
     response.error.code = err.statusCode;
     response.error.messages = err.responseErrorMessages;
+
+    // if it is a `ValidationError` class, set the relative field into the response
+    if (err instanceof ValidationError) {
+      response.error.field = err.field;
+    }
 
     // if there are debug message I print them
     if (err.debugErrorMessages && err.debugErrorMessages.length) {

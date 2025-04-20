@@ -19,3 +19,9 @@ export const passwordSchema = z
   .regex(REGEX.UC_ALPHA, "Password must contains at least one uppercase letter")
   .regex(REGEX.NUMBER, "Password must contains at least one number")
   .regex(REGEX.HARD_SPECIALS, "Password must contains at least one special character (!@#$%^&*)");
+
+// `url` validation schema
+export const urlSchema = z.string().url();
+
+// `datetime` validation schema
+export const datetimeSchema = z.string().datetime({ offset: true });
