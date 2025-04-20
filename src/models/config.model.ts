@@ -1,3 +1,6 @@
+import { Algorithm } from "jsonwebtoken";
+import type { StringValue } from "ms";
+
 // enumerates application's environments
 export enum Environment {
   // eslint-disable-next-line no-unused-vars
@@ -16,9 +19,7 @@ export enum Environment {
   PRODUCTION = "production",
 }
 
-/**
- * Application's config
- */
+// application's config
 export type Config = {
   /**
    * Current environment
@@ -36,4 +37,36 @@ export type Config = {
    * AWS region
    */
   awsRegion: string;
+  /**
+   * JWT algorithm
+   */
+  jwtAlgorithm: Algorithm | undefined;
+  /**
+   * JWT access token expiry
+   */
+  jwtAccessExpiry: number | StringValue;
+  /**
+   * JWT refresh token expiry
+   */
+  jwtRefreshExpiry: number | StringValue;
+  /**
+   * JWT public key
+   */
+  jwtPublicKey: string;
+  /**
+   * JWT private key
+   */
+  jwtPrivateKey: string;
+};
+
+// config's parser
+export type ConfigParser = {
+  /**
+   * Callback to parse environment value
+   * @param {string} name param's name
+   * @param {string} value param's value
+   * @returns {Config[K]} parsed value or default
+   */
+  // eslint-disable-next-line no-unused-vars
+  [K in keyof Config]: (name: string, value?: string) => Config[K];
 };
