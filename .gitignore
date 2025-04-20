@@ -145,3 +145,4 @@ dist
 
 # Custom
 .private
+config/keys
