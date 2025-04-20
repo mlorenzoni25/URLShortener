@@ -1,6 +1,6 @@
 import path from "path";
+import { LoggerOptions } from "pino";
 import { fileURLToPath } from "url";
-import { config } from "./app.conf.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 const LOG_BASE_DIRECTORY = path.join(__dirname, "..", "..", "logs");
 
 // config for development env
-export const devConf = {
+export const devConf: LoggerOptions = {
   transport: {
     targets: [
       {
@@ -27,7 +27,7 @@ export const devConf = {
 };
 
 // config for production env
-export const prodConf = {
+export const prodConf: LoggerOptions = {
   transport: {
     targets: [
       {
@@ -54,8 +54,4 @@ export const prodConf = {
   timestamp: (): string => `,"timestamp":"${new Date().toISOString()}"`,
   // Removed the formatters since they're not compatible with transport targets
   messageKey: "message",
-  base: {
-    env: config.environment,
-    version: process.env.npm_package_version,
-  },
 };
