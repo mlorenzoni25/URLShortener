@@ -1,12 +1,12 @@
 import { Router } from "express";
+import { shortenURL } from "../controllers/url.controller.js";
 import * as UserController from "../controllers/user.controller.js";
-import { authenticated, refreshable } from "../middlewares/authentication/auth.middleware.js";
+import { refreshable } from "../middlewares/authentication/auth.middleware.js";
 import { validateCreateShortenedURLRequest } from "../middlewares/url.middleware.js";
 import {
   validateLoginRequest,
   validateRegisterUserRequest,
 } from "../middlewares/user.middleware.js";
-import { shortenURL } from "../controllers/url.controller.js";
 
 // api router
 const apiRouter = Router();
@@ -17,6 +17,6 @@ apiRouter.post("/login", validateLoginRequest, UserController.loginUser);
 apiRouter.post("/refresh", refreshable, UserController.refreshUser);
 
 // url api
-apiRouter.post("/url", authenticated, validateCreateShortenedURLRequest, shortenURL);
+apiRouter.post("/url", validateCreateShortenedURLRequest, shortenURL);
 
 export default apiRouter;

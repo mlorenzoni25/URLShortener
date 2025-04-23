@@ -18,15 +18,53 @@ export interface URLItem extends Item {
 // users's table schema
 const urlShortenedSchema = new dynamoose.Schema(
   {
-    ShortenedId: { alias: "shortenedId", required: true, type: String },
-    CurrentUses: { alias: "currentUses", default: 0, required: false, type: Number },
-    MaxUses: { alias: "maxUses", default: 0, required: false, type: Number },
-    Password: { alias: "password", default: "", required: false, type: String },
-    Url: { alias: "url", required: true, type: String },
-    ValidFrom: { alias: "validFrom", default: "", required: false, type: String },
-    ValidTo: { alias: "validTo", default: "", required: false, type: String },
+    ShortenedId: {
+      alias: "shortenedId",
+      required: true,
+      type: String,
+    },
+    CurrentUses: {
+      alias: "currentUses",
+      default: 0,
+      required: false,
+      type: Number,
+    },
+    MaxUses: {
+      alias: "maxUses",
+      default: 0,
+      required: false,
+      type: Number,
+    },
+    Password: {
+      alias: "password",
+      default: "",
+      required: false,
+      type: String,
+    },
+    Url: {
+      alias: "url",
+      required: true,
+      type: String,
+    },
+    ValidFrom: {
+      alias: "validFrom",
+      default: "",
+      required: false,
+      type: String,
+    },
+    ValidTo: {
+      alias: "validTo",
+      default: "",
+      required: false,
+      type: String,
+    },
   },
-  { timestamps: { createdAt: "CreatedAt", updatedAt: "UpdatedAt" } },
+  {
+    timestamps: {
+      createdAt: "CreatedAt",
+      updatedAt: "UpdatedAt",
+    },
+  },
 );
 
 export const URLModel = dynamoose.model<URLItem>("URLShortener_URLs", urlShortenedSchema, {

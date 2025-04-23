@@ -14,4 +14,14 @@ export const CreateShortenedURLRequestSchema = z
   .partial()
   .required({ url: true });
 
+// validation schema of `getURL` controller
+export const RedirectToRequestSchema = z
+  .object({
+    shortenedId: z.string(),
+    password: passwordSchema.default(""),
+  })
+  .partial()
+  .required({ shortenedId: true });
+
 export type CreateShortenedURLRequest = z.infer<typeof CreateShortenedURLRequestSchema>;
+export type RedirectToRequest = z.infer<typeof RedirectToRequestSchema>;

@@ -6,6 +6,7 @@ import { config } from "./config/app.conf.js";
 import logger from "./logger.js";
 import errorHandler from "./middlewares/error-handler.middleware.js";
 import apiRouter from "./routes/api.route.js";
+import appRouter from "./routes/app.route.js";
 
 const app = express();
 
@@ -72,6 +73,9 @@ app
       methods: ["GET", "POST"],
     }),
   );
+
+// app router
+app.use("/", appRouter);
 
 // api router
 app.use("/api", apiRouter);
