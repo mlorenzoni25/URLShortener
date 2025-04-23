@@ -57,8 +57,8 @@ const config = tseslint.config(js.configs.recommended, tseslint.configs.recommen
     "@typescript-eslint/no-inferrable-types": [
       "warn",
       {
-        ignoreParameters: false,
-        ignoreProperties: false,
+        ignoreParameters: true,
+        ignoreProperties: true,
       },
     ],
 
