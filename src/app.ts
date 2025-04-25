@@ -5,6 +5,7 @@ import { pinoHttp } from "pino-http";
 import { config } from "./config/app.conf.js";
 import logger from "./logger.js";
 import errorHandler from "./middlewares/error-handler.middleware.js";
+import { closeConnection } from "./redis.js";
 import apiRouter from "./routes/api.route.js";
 import appRouter from "./routes/app.route.js";
 
@@ -82,5 +83,10 @@ app.use("/api", apiRouter);
 
 // middleware to handle errors
 app.use(errorHandler);
+
+// close the connection when application receives SIGINT signal
+process.on("SIGINT", async () => {
+  await closeConnection();
+});
 
 export default app;
