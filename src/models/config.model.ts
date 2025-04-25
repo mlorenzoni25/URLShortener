@@ -57,6 +57,18 @@ export type Config = {
    * JWT private key
    */
   jwtPrivateKey: string;
+  /**
+   * Host to access Redis DB
+   */
+  redisHost: string;
+  /**
+   * Port to access Redis DB
+   */
+  redisPort: number;
+  /**
+   * Password to access Redis DB
+   */
+  redisPassword: string;
 };
 
 // config's parser

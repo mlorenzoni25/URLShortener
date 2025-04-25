@@ -3,6 +3,7 @@ import { Algorithm } from "jsonwebtoken";
 import type { StringValue } from "ms";
 import constants from "node:constants";
 import { accessSync, existsSync, readFileSync } from "node:fs";
+import CheckError from "../exception/check.exception.js";
 import { Config, ConfigParser, Environment } from "../models/config.model.js";
 
 const JWT_ALGORITHMS: string[] = [
@@ -57,12 +58,13 @@ const configParser: ConfigParser = {
    * Parse the config's param `awsProfile`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
-   * @throws {Error} if value is empty
+   * @throws {CheckError} if value is empty
    * @returns {string} parsed param's value
    */
   awsProfile: (name: string, value?: string): string => {
+    // if empty generate an exception
     if (!value) {
-      throw new Error(`Param "${name}" is required and cannot be empty.`);
+      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
     }
     return value;
   },
@@ -70,12 +72,13 @@ const configParser: ConfigParser = {
    * Parse the config's param `awsRegion`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
-   * @throws {Error} if value is empty
+   * @throws {CheckError} if value is empty
    * @returns {string} parsed param's value
    */
   awsRegion: (name: string, value?: string): string => {
+    // if empty generate an exception
     if (!value) {
-      throw new Error(`Param "${name}" is required and cannot be empty.`);
+      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
     }
     return value;
   },
@@ -203,6 +206,48 @@ const configParser: ConfigParser = {
 
     return readFileSync(defaultValue).toString();
   },
+  /**
+   * Parse the config's param `redisHost`
+   * @param {string} name param's name
+   * @param {string | undefined} value param's value
+   * @throws {CheckError} if value is empty
+   * @returns {string} parsed param's value
+   */
+  redisHost: (name: string, value?: string): string => {
+    // if empty generate an exception
+    if (!value) {
+      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
+    }
+    return value;
+  },
+  /**
+   * Parse the config's param `redisPort`
+   * @param {string} name param's name
+   * @param {string | undefined} value param's value
+   * @returns {number} parsed param's value
+   */
+  redisPort: (name: string, value?: string): number => {
+    const parsed = Number(value);
+    if (isNaN(parsed) || parsed < 0 || parsed > 65536) {
+      console.warn(`Cannot parse "${name}" param, will be used default value (3000)`);
+      return 6379;
+    }
+    return parsed;
+  },
+  /**
+   * Parse the config's param `redisPassword`
+   * @param {string} name param's name
+   * @param {string | undefined} value param's value
+   * @throws {CheckError} if value is empty
+   * @returns {string} parsed param's value
+   */
+  redisPassword: (name: string, value?: string): string => {
+    // if empty generate an exception
+    if (!value) {
+      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
+    }
+    return value;
+  },
 };
 
 // application's config
@@ -226,6 +271,7 @@ export const config: Config = {
     "JWT_PRIVATE_KEY_PATH",
     process.env.JWT_PRIVATE_KEY_PATH,
   ),
+  redisPassword: configParser.redisPassword("REDIS_PASSWORD", process.env.REDIS_PASSWORD),
 };
 
 /**
