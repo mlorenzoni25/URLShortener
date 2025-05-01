@@ -1,4 +1,6 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { config } from "../config/app.conf.js";
 
 /**
  * Generete the hash of the password (wrap of `bcrypt.hash(...)`)
@@ -34,4 +36,17 @@ export const cleanAuthToken = (token: string, prefix: string): string => {
 
   // remove the whitespace from the token
   return token.trim();
+};
+
+/**
+ * Verify if the JWT token is valid
+ * @param {string} token token to validate
+ * @returns {string | jwt.JwtPayload} token's payload
+ */
+export const verifyJWT = (token: string): string | jwt.JwtPayload => {
+  // remove the bearer prefix
+  const accessToken = cleanAuthToken(token, "Bearer");
+
+  // verify a token
+  return jwt.verify(accessToken, config.jwtPublicKey);
 };

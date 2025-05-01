@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { config } from "../../config/app.conf.js";
 import AuthenticationError from "../../exception/authentication.exception.js";
-import { cleanAuthToken } from "../../helpers/security.helper.js";
+import { cleanAuthToken, verifyJWT } from "../../helpers/security.helper.js";
 
 /**
  * Middleware to check if the user is logged
@@ -22,15 +22,12 @@ export const authenticated = async (
       throw new AuthenticationError([], "Access token not found.");
     }
 
-    // remove the bearer prefix
-    const accessToken = cleanAuthToken(req.headers["authorization"], "Bearer");
-
     // verify a token
     try {
       if (!req.body) {
         req.body = {};
       }
-      req.body.__user = jwt.verify(accessToken, config.jwtPublicKey);
+      req.body.__user = verifyJWT(req.headers["authorization"]);
     } catch (err) {
       throw new AuthenticationError([], [(err as Error).toString()]);
     }
