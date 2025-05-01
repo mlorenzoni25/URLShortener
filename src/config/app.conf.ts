@@ -4,6 +4,7 @@ import type { StringValue } from "ms";
 import constants from "node:constants";
 import { accessSync, existsSync, readFileSync } from "node:fs";
 import CheckError from "../exception/check.exception.js";
+import { isBetween } from "../helpers/number.helper.js";
 import { Config, ConfigParser, Environment } from "../models/config.model.js";
 
 const JWT_ALGORITHMS: string[] = [
@@ -20,6 +21,45 @@ const JWT_ALGORITHMS: string[] = [
   "PS384",
   "PS512",
 ];
+
+interface ParseNumberOptions {
+  defaultValue: number;
+  minValue?: number;
+  maxValue?: number;
+}
+
+/**
+ * Callback to parse numeric values
+ * @param {string} name param's name
+ * @param {string | undefined} value param's value
+ * @param {ParseNumberOptions | undefined} options parsing options
+ * @throws {CheckError} if param is required and the value is empty
+ * @returns {number | string} parsed value or default
+ */
+const parseNumber = (name: string, value?: string, options?: ParseNumberOptions): number => {
+  // extract the options
+  const { defaultValue = null, minValue, maxValue } = options || {};
+
+  // parse the value into a number to check if it has a valid value
+  const parsed = Number(value);
+  if (isNaN(parsed)) {
+    if (!defaultValue) {
+      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
+    }
+    console.warn(`Cannot parse "${name}" param, will be used default value (${defaultValue})`);
+    return defaultValue;
+  }
+
+  // check if the value is in the interval
+  if (!isBetween(parsed, minValue, maxValue, true)) {
+    if (!defaultValue) {
+      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
+    }
+    return defaultValue;
+  }
+
+  return parsed;
+};
 
 // default application's config
 const configParser: ConfigParser = {
@@ -47,12 +87,11 @@ const configParser: ConfigParser = {
    * @returns {number} parsed param's value
    */
   port: (name: string, value?: string): number => {
-    const parsed = Number(value);
-    if (isNaN(parsed) || parsed < 0 || parsed > 65536) {
-      console.warn(`Cannot parse "${name}" param, will be used default value (3000)`);
-      return 3000;
-    }
-    return parsed;
+    return parseNumber(name, value, {
+      defaultValue: 3000,
+      minValue: 0,
+      maxValue: 65536,
+    });
   },
   /**
    * Parse the config's param `awsProfile`
@@ -227,12 +266,11 @@ const configParser: ConfigParser = {
    * @returns {number} parsed param's value
    */
   redisPort: (name: string, value?: string): number => {
-    const parsed = Number(value);
-    if (isNaN(parsed) || parsed < 0 || parsed > 65536) {
-      console.warn(`Cannot parse "${name}" param, will be used default value (3000)`);
-      return 6379;
-    }
-    return parsed;
+    return parseNumber(name, value, {
+      defaultValue: 6379,
+      minValue: 0,
+      maxValue: 65536,
+    });
   },
   /**
    * Parse the config's param `redisPassword`
@@ -247,6 +285,30 @@ const configParser: ConfigParser = {
       throw new CheckError(`Param "${name}" is required and cannot be empty.`);
     }
     return value;
+  },
+  /**
+   * Parse the config's param `urlsPerDay`
+   * @param {string} name param's name
+   * @param {string | undefined} value param's value
+   * @returns {number} parsed param's value
+   */
+  urlsPerDay: (name: string, value?: string) => {
+    return parseNumber(name, value, {
+      defaultValue: 10,
+      minValue: 0,
+    });
+  },
+  /**
+   * Parse the config's param `urlsPerDayLogged`
+   * @param {string} name param's name
+   * @param {string | undefined} value param's value
+   * @returns {number} parsed param's value
+   */
+  urlsPerDayLogged: (name: string, value?: string) => {
+    return parseNumber(name, value, {
+      defaultValue: 10,
+      minValue: 0,
+    });
   },
 };
 
@@ -271,7 +333,20 @@ export const config: Config = {
     "JWT_PRIVATE_KEY_PATH",
     process.env.JWT_PRIVATE_KEY_PATH,
   ),
+  // redis
+  redisHost: configParser.redisHost("REDIS_HOST", process.env.REDIS_HOST),
+  redisPort: parseNumber("REDIS_PORT", process.env.REDIS_PORT, {
+    defaultValue: 6379,
+    minValue: 0,
+    maxValue: 65536,
+  }),
   redisPassword: configParser.redisPassword("REDIS_PASSWORD", process.env.REDIS_PASSWORD),
+  // urls
+  urlsPerDay: configParser.urlsPerDay("URLS_PER_DAY", process.env.URLS_PER_DAY),
+  urlsPerDayLogged: configParser.urlsPerDayLogged(
+    "URLS_PER_DAY_LOGGED",
+    process.env.URLS_PER_DAY_LOGGED,
+  ),
 };
 
 /**

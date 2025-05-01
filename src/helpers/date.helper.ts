@@ -45,3 +45,16 @@ export const isBetween = (
 
   return { minDateError: false, maxDateError: false };
 };
+
+/**
+ * Gets the current date in ISO format
+ * @param {boolean} includeHours boolean flag to get the date with hours
+ * @returns {string} current date in ISO format
+ */
+export const todayISO = (includeHours: boolean = false): string => {
+  const date = new Date().toISOString();
+  if (includeHours) {
+    return date;
+  }
+  return date.substring(0, 10);
+};

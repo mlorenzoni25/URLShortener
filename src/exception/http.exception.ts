@@ -22,10 +22,10 @@ class HTTPError extends Error {
    * @param {string | string[]} debuggerMessages error messages (debug internal use)
    */
   constructor(
-      message: string,
-      statusCode: number = 500,
-      responseMessages: string | string[] = [],
-      debuggerMessages: string | string[] = [],
+    message: string,
+    statusCode: number = 500,
+    responseMessages: string | string[] = [],
+    debuggerMessages: string | string[] = [],
   ) {
     super(message);
 
@@ -41,10 +41,19 @@ class HTTPError extends Error {
 
   /**
    * Gets the HTTP status code
-   * @returns {number}
+   * @returns {number} current HTTP status code value
    */
   get statusCode(): number {
     return this._statusCode;
+  }
+
+  /**
+   * Sets the HTTP status code
+   * @param {number} statusCode new HTTP status code value
+   * @returns {void}
+   */
+  set statusCode(statusCode: number) {
+    this._statusCode = statusCode;
   }
 
   /**

@@ -69,6 +69,14 @@ export type Config = {
    * Password to access Redis DB
    */
   redisPassword: string;
+  /**
+   * Limit number of url's generations
+   */
+  urlsPerDay: number;
+  /**
+   * Limit number of url's generations for logged users
+   */
+  urlsPerDayLogged: number;
 };
 
 // config's parser
@@ -76,7 +84,7 @@ export type ConfigParser = {
   /**
    * Callback to parse environment value
    * @param {string} name param's name
-   * @param {string} value param's value
+   * @param {string | undefined} value param's value
    * @returns {Config[K]} parsed value or default
    */
   // eslint-disable-next-line no-unused-vars
