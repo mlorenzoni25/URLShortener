@@ -7,8 +7,6 @@ A robust URL shortening service built with Node.js, Express, TypeScript, and AWS
 - **URL Shortening**: Convert long URLs into short, manageable links
 - **User Authentication**: Register and login system
 - **Rate Limiting**: Different request limits for authenticated and anonymous users
-- **User Dashboard**: Track, edit, and delete your shortened URLs
-- **Statistics**: View analytics for your links
 - **Caching**: Redis implementation for frequently accessed URLs
 - **Security Focused**: Built with security best practices
 
@@ -73,7 +71,6 @@ This project was created with the following learning objectives:
 - Strengthening TypeScript skills
 - Applying security best practices
 - Writing clean, maintainable code
-- Building a portfolio project for job interviews
 
 ## 📄 License
 
