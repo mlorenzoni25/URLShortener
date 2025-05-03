@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { config } from "../config/app.conf.js";
 
 /**
- * Generete the hash of the password (wrap of `bcrypt.hash(...)`)
+ * Generates the hash of the password (wrap of `bcrypt.hash(...)`)
  * @param {string} plainText password to hash
  * @param {number} rounds number of rounds used to generate the salt
  * @returns {Promise<string>} a promise that will be resolve with the hashed password
@@ -23,7 +23,7 @@ export const comparePassword = (plainText: string, hash: string): Promise<boolea
 };
 
 /**
- * Strip token's prefix
+ * Strips token's prefix
  * @param {string} token token to clean
  * @param {string} prefix prefix to strip
  * @returns {string} stripped token
