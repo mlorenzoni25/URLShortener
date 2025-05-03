@@ -6,6 +6,7 @@ import { comparePassword } from "../helpers/security.helper.js";
 import { generateUUID, toBase62 } from "../helpers/string.helper.js";
 import { URLRequestToModel } from "../mappers/url.mapper.js";
 import { URLItem, URLModel } from "../models/shortenedURLs.model.js";
+import redis from "../redis.js";
 import { incrementUsesCounter } from "../repository/shortened-urls.repository.js";
 import { CreateShortenedURLRequest, RedirectToRequest } from "../schema/url.schema.js";
 
@@ -40,7 +41,8 @@ export const createShortenedURL = async (
  * @returns {Promise<string>} a promise that will be resolve with the real URL
  */
 export const getRedirectToInfo = async (data: RedirectToRequest): Promise<string> => {
-  const url = await URLModel.get(data.shortenedId);
+  // get the url info
+  const url = await getURL(data.shortenedId);
   if (!url) {
     throw new CheckError("ShortenedId not found.");
   }
@@ -117,6 +119,38 @@ const generateUniqueId = (): string => {
 
   // convert to base62 to shorten the length
   return toBase62(hashInt);
+};
+
+/**
+ * Gets the url
+ * @param {string} shortenedId url shortened id
+ * @returns {Promise<URLItem | null>} a promise that will be resolve with 2 possible values, `URLItem` object if the url is cached, `null` otherwise
+ */
+const getURL = async (shortenedId: string): Promise<URLItem | null> => {
+  // try to get the url from cache
+  const cached = await getURLFromCache(shortenedId);
+  if (cached) {
+    return cached;
+  }
+
+  // get the url from database
+  return await URLModel.get(shortenedId);
+};
+
+/**
+ * Gets an url from cache
+ * @param {string} shortenedId url shortened id
+ * @returns {Promise<URLItem | null>} a promise that will be resolve with 2 possible values, `URLItem` object if the url is cached, `null` otherwise
+ */
+const getURLFromCache = async (shortenedId: string): Promise<URLItem | null> => {
+  // read from cache
+  const urlJSON = await redis.get(`cache:url:data:${shortenedId}`);
+  if (!urlJSON) {
+    return null;
+  }
+
+  // transform the string into an object
+  return JSON.parse(urlJSON) as URLItem;
 };
 
 /**
