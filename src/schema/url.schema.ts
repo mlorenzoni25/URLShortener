@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { datetimeSchema, passwordSchema, urlSchema, usernameSchema } from "./common.schema.js";
+import {
+  milliTimestampSchema,
+  passwordSchema,
+  urlSchema,
+  usernameSchema,
+} from "./common.schema.js";
 
 // validation schema of `shortenURL` controller
 export const CreateShortenedURLRequestSchema = z
@@ -8,8 +13,8 @@ export const CreateShortenedURLRequestSchema = z
     maxUses: z.number().gt(0).default(0),
     password: passwordSchema.default(""),
     url: urlSchema,
-    validFrom: datetimeSchema.default(""),
-    validTo: datetimeSchema.default(""),
+    validFrom: milliTimestampSchema.default(-1),
+    validTo: milliTimestampSchema.default(-1),
   })
   .partial()
   .required({ url: true });

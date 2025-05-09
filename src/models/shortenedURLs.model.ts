@@ -48,15 +48,15 @@ const urlShortenedSchema = new dynamoose.Schema(
     },
     ValidFrom: {
       alias: "validFrom",
-      default: "",
+      default: -1,
       required: false,
-      type: String,
+      type: Number,
     },
     ValidTo: {
       alias: "validTo",
-      default: "",
+      default: -1,
       required: false,
-      type: String,
+      type: Number,
     },
   },
   {

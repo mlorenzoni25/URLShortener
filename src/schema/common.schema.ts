@@ -23,5 +23,11 @@ export const passwordSchema = z
 // `url` validation schema
 export const urlSchema = z.string().url();
 
-// `datetime` validation schema
-export const datetimeSchema = z.string().datetime({ offset: true });
+// `milliTimestamp` validation schema
+export const milliTimestampSchema = z
+  .number()
+  .int()
+  .positive()
+  .refine((value: number) => value.toString().length === 13, {
+    message: "Timestamp must be an integer value of 13 digits",
+  });
