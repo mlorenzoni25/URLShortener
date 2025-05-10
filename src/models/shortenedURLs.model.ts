@@ -1,4 +1,5 @@
 import { Item } from "dynamoose/dist/Item.js";
+import { IndexType } from "dynamoose/dist/Schema.js";
 import dynamoose from "../database.js";
 
 // application internal object for user model
@@ -6,6 +7,7 @@ export interface URLItem extends Item {
   shortenedId: string;
   alias: string;
   currentUses: number;
+  cachePartition?: string;
   maxUses: number;
   password: string;
   url: string;
@@ -38,6 +40,17 @@ const urlShortenedSchema = new dynamoose.Schema(
     Password: {
       alias: "password",
       default: "",
+      required: false,
+      type: String,
+    },
+    CachePartition: {
+      alias: "cachePartition",
+      default: "TopUsed",
+      index: {
+        name: "TopUsedCacheIndex",
+        rangeKey: "CurrentUses",
+        type: IndexType.global,
+      },
       required: false,
       type: String,
     },

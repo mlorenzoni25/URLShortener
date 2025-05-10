@@ -48,3 +48,11 @@ export const LOGGER = {
   // directory where store log's files
   BASE_DIRECTORY: path.join(__dirname, "..", "logs"),
 };
+
+// cache
+export const CACHE = {
+  // maximum number of URLs to store in cache
+  URL_MAX_SIZE: 50,
+  // duration in seconds of URLs in cache
+  URL_SECONDS_EXPIRE: 86400,
+};
