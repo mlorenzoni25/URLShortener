@@ -1,3 +1,15 @@
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// charset
+export const CHARSET = {
+  // base62
+  BASE62: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+};
+
 // validation regex
 export const REGEX = {
   // alphanumeric with . _ -
@@ -10,4 +22,29 @@ export const REGEX = {
   NUMBER: /\d/,
   // special chars
   HARD_SPECIALS: /[!@#$%^&*]/,
+};
+
+// token JWT
+export const JWT = {
+  // supported algorithms
+  ALGORITHMS: [
+    "HS256",
+    "HS384",
+    "HS512",
+    "RS256",
+    "RS384",
+    "RS512",
+    "ES256",
+    "ES384",
+    "ES512",
+    "PS256",
+    "PS384",
+    "PS512",
+  ],
+};
+
+// logger
+export const LOGGER = {
+  // directory where store log's files
+  BASE_DIRECTORY: path.join(__dirname, "..", "logs"),
 };

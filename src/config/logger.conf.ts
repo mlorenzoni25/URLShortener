@@ -1,12 +1,6 @@
 import path from "path";
 import { LoggerOptions } from "pino";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// directory where store log's files
-const LOG_BASE_DIRECTORY = path.join(__dirname, "..", "..", "logs");
+import { LOGGER } from "../constants.js";
 
 // config for development env
 export const devConf: LoggerOptions = {
@@ -34,7 +28,7 @@ export const prodConf: LoggerOptions = {
         target: "pino/file",
         level: "info",
         options: {
-          destination: path.join(LOG_BASE_DIRECTORY, "url-shortener.log"),
+          destination: path.join(LOGGER.BASE_DIRECTORY, "url-shortener.log"),
           mkdir: true,
           sync: false,
         },
@@ -43,7 +37,7 @@ export const prodConf: LoggerOptions = {
         target: "pino/file",
         level: "warn",
         options: {
-          destination: path.join(LOG_BASE_DIRECTORY, "url-shortener.err.log"),
+          destination: path.join(LOGGER.BASE_DIRECTORY, "url-shortener.err.log"),
           mkdir: true,
           sync: false,
         },

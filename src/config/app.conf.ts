@@ -3,24 +3,10 @@ import { Algorithm } from "jsonwebtoken";
 import type { StringValue } from "ms";
 import constants from "node:constants";
 import { accessSync, existsSync, readFileSync } from "node:fs";
+import { JWT } from "../constants.js";
 import CheckError from "../exception/check.exception.js";
 import { isBetween } from "../helpers/number.helper.js";
 import { Config, ConfigParser, Environment } from "../models/config.model.js";
-
-const JWT_ALGORITHMS: string[] = [
-  "HS256",
-  "HS384",
-  "HS512",
-  "RS256",
-  "RS384",
-  "RS512",
-  "ES256",
-  "ES384",
-  "ES512",
-  "PS256",
-  "PS384",
-  "PS512",
-];
 
 interface ParseNumberOptions {
   defaultValue: number;
@@ -129,7 +115,7 @@ const configParser: ConfigParser = {
    */
   jwtAlgorithm: (name: string, value?: string): Algorithm => {
     // if empty use default value
-    if (!value || !JWT_ALGORITHMS.includes(value)) {
+    if (!value || !JWT.ALGORITHMS.includes(value)) {
       console.warn(`Cannot parse "${name}" param, will be used default value (ES256)`);
       return "ES256";
     }
