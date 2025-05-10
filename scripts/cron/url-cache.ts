@@ -12,7 +12,7 @@ let lastKey: ObjectType | null = null;
 const results: URLItem[] = [];
 
 // clear the cache
-const keys = await redis.keys("url_cache:*");
+const keys = await redis.keys("cache:url:data:*");
 logger.info(`URL Cache Builder - Found ${keys.length} items to delete`);
 if (keys.length > 0) {
   await redis.del(...keys);
@@ -42,7 +42,7 @@ while (results.length < CACHE.URL_MAX_SIZE) {
 logger.info(`URL Cache Builder - Found ${results.length} items to store in the cache`);
 
 for (const urlItem of results) {
-  const key = `url_cache:${urlItem.shortenedId}`;
+  const key = `cache:url:data:${urlItem.shortenedId}`;
   await redis.set(key, JSON.stringify(urlItem));
   await redis.expire(key, CACHE.URL_SECONDS_EXPIRE);
 }
