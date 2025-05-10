@@ -9,12 +9,13 @@
     "build": "tsc",
     "dev": "tsx --watch --env-file .env src/server.ts",
     "dev:cron:populate-url-cache": "tsx --env-file .env scripts/cron/url-cache.ts",
-    "dev:prod": "tsx --watch --env-file .env.production src/index.ts",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint": "eslint . --ext .ts --fix",
     "lint-staged": "lint-staged",
     "prepare": "husky",
+    "prod": "tsx --watch --env-file .env.production src/index.ts",
+    "prod:cron:populate-url-cache": "tsx --env-file .env.production scripts/cron/url-cache.ts",
     "start": "tsx --watch --env-file .env src/"
   },
   "dependencies": {
