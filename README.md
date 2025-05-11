@@ -59,8 +59,7 @@ aws_secret_access_key = <YOUR_AWS_SECRET_ACCESS_KEY>
 
 ### 4. Redis Setup
 
-Install Redis by following the official installation guide:
-👉 [https://redis.io/docs/latest/operate/install/](https://redis.io/docs/latest/operate/install/)
+Install Redis by following the [official installation guide](https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/).
 
 > 💡 It's **highly recommended** to secure your Redis instance with a strong password, especially in production environments.
 > Once enabled, make sure to add it to the `.env` file under `REDIS_PASSWORD`.
