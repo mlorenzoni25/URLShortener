@@ -126,7 +126,7 @@ You’re ready to start testing the API with Postman or any other client ⚡
 
 ### 8. Enable URL Cache
 
-To enable caching of frequently accessed URLs, schedule the script `./scripts/cron/url-cache.ts` to run periodically using cron (e.g., once per day). This helps keep the cache warm and improves response performance.
+To enable caching of frequently accessed URLs, schedule the script `./src/scripts/cron/url-cache.ts` to run periodically using cron (e.g., once per day). This helps keep the cache warm and improves response performance.
 
 ### 📦 Upcoming Features
 
