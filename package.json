@@ -6,7 +6,8 @@
   "author": "Michele Lorenzoni",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build tsconfig.production.json",
+    "clean": "rm -rf dist",
     "dev": "tsx --watch --env-file .env src/server.ts",
     "dev:cron:populate-url-cache": "tsx --env-file .env scripts/cron/url-cache.ts",
     "format:check": "prettier --check .",
@@ -15,8 +16,7 @@
     "lint-staged": "lint-staged",
     "prepare": "husky",
     "prod": "tsx --watch --env-file .env.production src/index.ts",
-    "prod:cron:populate-url-cache": "tsx --env-file .env.production scripts/cron/url-cache.ts",
-    "start": "tsx --watch --env-file .env src/"
+    "prod:cron:populate-url-cache": "tsx --env-file .env.production scripts/cron/url-cache.ts"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.788.0",
