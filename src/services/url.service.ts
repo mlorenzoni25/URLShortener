@@ -1,6 +1,5 @@
 import AuthenticationError from "../exception/authentication.exception.js";
 import CheckError from "../exception/check.exception.js";
-import ValidationError from "../exception/validation.exception.js";
 import * as DateHelper from "../helpers/date.helper.js";
 import { comparePassword } from "../helpers/security.helper.js";
 import { generateUUID, toBase62 } from "../helpers/string.helper.js";
@@ -67,15 +66,14 @@ export const getRedirectToInfo = async (data: RedirectToRequest): Promise<string
 /**
  * Generates an id using the user's alias
  * @param {string} alias url's alias
- * @throws {ValidationError} if alias already exists
+ * @throws {CheckError} if alias already exists
  * @returns {Promise<string>} shortened url
  */
 const generateShortenedIdFromAlias = async (alias: string): Promise<string> => {
   // if already exists the alias I reject it
   const exists = await URLModel.get(alias);
   if (exists) {
-    throw new ValidationError(
-      "alias",
+    throw new CheckError(
       "Alias is not available.",
       "Shortened URL generation failed: alias already used.",
     );

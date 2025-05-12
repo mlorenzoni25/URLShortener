@@ -1,6 +1,5 @@
 export interface ErrorResponse {
   code: number;
-  field?: string;
   messages: string[];
 }
 
