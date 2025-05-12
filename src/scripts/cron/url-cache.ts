@@ -1,9 +1,9 @@
 import { ObjectType } from "dynamoose/dist/General.js";
-import { CACHE } from "../../src/constants.js";
-import logger from "../../src/logger.js";
-import { URLItem } from "../../src/models/shortenedURLs.model.js";
-import redis from "../../src/redis.js";
-import { getTopUsedURLs } from "../../src/repository/shortened-urls.repository.js";
+import { CACHE } from "../../constants.js";
+import logger from "../../logger.js";
+import { URLItem } from "../../models/shortenedURLs.model.js";
+import redis from "../../redis.js";
+import { getTopUsedURLs } from "../../repository/shortened-urls.repository.js";
 
 const startTime = Date.now();
 logger.info("URL Cache Builder - Script started");
