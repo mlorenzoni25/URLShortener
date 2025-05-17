@@ -259,6 +259,20 @@ const configParser: ConfigParser = {
     });
   },
   /**
+   * Parse the config's param `redisUser`
+   * @param {string} name param's name
+   * @param {string | undefined} value param's value
+   * @throws {CheckError} if value is empty
+   * @returns {string} parsed param's value
+   */
+  redisUser: (name: string, value?: string): string => {
+    // if empty generate an exception
+    if (!value) {
+      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
+    }
+    return value;
+  },
+  /**
    * Parse the config's param `redisPassword`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
@@ -326,6 +340,7 @@ export const config: Config = {
     minValue: 0,
     maxValue: 65536,
   }),
+  redisUser: configParser.redisUser("REDIS_USER", process.env.REDIS_USER),
   redisPassword: configParser.redisPassword("REDIS_PASSWORD", process.env.REDIS_PASSWORD),
   // urls
   urlsPerDay: configParser.urlsPerDay("URLS_PER_DAY", process.env.URLS_PER_DAY),

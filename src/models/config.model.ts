@@ -66,6 +66,10 @@ export type Config = {
    */
   redisPort: number;
   /**
+   * User to access Redis DB
+   */
+  redisUser: string;
+  /**
    * Password to access Redis DB
    */
   redisPassword: string;

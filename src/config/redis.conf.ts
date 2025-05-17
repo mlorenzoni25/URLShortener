@@ -4,7 +4,9 @@ import { config } from "./app.conf.js";
 const redisConf: RedisOptions = {
   host: config.redisHost,
   port: config.redisPort,
+  username: config.redisUser,
   password: config.redisPassword,
+  keyPrefix: "urlshortener",
 };
 
 export default redisConf;
