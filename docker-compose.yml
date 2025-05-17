@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    command: npm run start
+    container_name: urlshortener
+    depends_on:
+      - redis
+    env_file:
+      - .env.production
+    networks:
+      - urlshortener-network
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./config/keys:/app/config/keys:ro
+
+  redis:
+    image: redis:7
+    container_name: redis
+    command: redis-server /etc/redis/redis.conf
+    networks:
+      - urlshortener-network
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./compose/redis/redis.conf:/etc/redis/redis.conf
+      - ./compose/redis:/redis/data/
+
+networks:
+  urlshortener-network:
+    driver: bridge
