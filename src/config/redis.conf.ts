@@ -5,7 +5,7 @@ const redisConf: RedisOptions = {
   host: config.redisHost,
   port: config.redisPort,
   username: config.redisUser,
-  password: config.redisPassword,
+  password: config.redisPassword?.value,
   keyPrefix: "urlshortener",
 };
 

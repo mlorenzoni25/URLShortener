@@ -7,12 +7,56 @@ import { JWT } from "../constants.js";
 import CheckError from "../exception/check.exception.js";
 import { isBetween } from "../helpers/number.helper.js";
 import { Config, ConfigParser, Environment } from "../models/config.model.js";
+import { Secret } from "../models/secret.model.js";
 
-interface ParseNumberOptions {
-  defaultValue: number;
+type ParseOptions = {
+  defaultValue?: number | string;
+};
+
+type ParseNumberOptions = ParseOptions & {
+  defaultValue?: number;
   minValue?: number;
   maxValue?: number;
-}
+};
+
+type ParseFileOptions = ParseOptions & {
+  defaultValue?: string;
+  secret: boolean;
+};
+
+/**
+ * Callback to parse optional values
+ * @param {string} name param's name
+ * @param {string | undefined} value param's value
+ * @param {ParseNumberOptions | undefined} options parsing options
+ * @returns {string} parsed value or default
+ */
+const parse = (name: string, value?: string, options?: ParseOptions): unknown => {
+  if (!value) {
+    console.warn(
+      `Cannot parse "${name}" param: value is empty. Will be used default value (${options?.defaultValue || undefined})`,
+    );
+    return options?.defaultValue || undefined;
+  }
+
+  return value;
+};
+
+/**
+ * Callback to parse required values
+ * @param {string} name param's name
+ * @param {string | undefined} value param's value
+ * @param {ParseNumberOptions | undefined} options parsing options
+ * @throws {CheckError} if value is empty
+ * @returns {string} parsed value
+ */
+const parseRequired = (name: string, value?: string): unknown => {
+  if (!value) {
+    throw new CheckError(`Param "${name}" is required and cannot be empty.`);
+  }
+
+  return value;
+};
 
 /**
  * Callback to parse numeric values
@@ -20,7 +64,7 @@ interface ParseNumberOptions {
  * @param {string | undefined} value param's value
  * @param {ParseNumberOptions | undefined} options parsing options
  * @throws {CheckError} if param is required and the value is empty
- * @returns {number | string} parsed value or default
+ * @returns {number} parsed value or default
  */
 const parseNumber = (name: string, value?: string, options?: ParseNumberOptions): number => {
   // extract the options
@@ -47,13 +91,60 @@ const parseNumber = (name: string, value?: string, options?: ParseNumberOptions)
   return parsed;
 };
 
+/**
+ * Callback to parse file values
+ * @param {string} name param's name
+ * @param {string | undefined} value param's value
+ * @param {ParseNumberOptions | undefined} options parsing options
+ * @throws {CheckError} if param is required and the value is empty
+ * @returns {number} parsed value or default
+ */
+const parseFile = (name: string, value?: string, options?: ParseFileOptions): Secret | string => {
+  // path to read
+  let path = options?.defaultValue;
+
+  // if empty use default value
+  if (!value) {
+    console.warn(
+      `Cannot parse "${name}" param: value is empty. Will be used the default value (content of file ${options?.defaultValue})`,
+    );
+  } else if (!existsSync(value)) {
+    // if file not exists use default value
+    console.warn(
+      `Cannot parse "${name}" param: path not exists. Will be used default value (content of file ${options?.defaultValue})`,
+    );
+  } else {
+    path = value;
+  }
+
+  // if file isn't readable use default value
+  try {
+    accessSync(path as string, constants.R_OK);
+  } catch {
+    console.warn(
+      `Cannot parse "${name}" param: path is not readable. Will be used default value (content of file ${options?.defaultValue})`,
+    );
+    return readFileSync(options?.defaultValue as string).toString();
+  }
+
+  // read the content and transform it into a string
+  const strContent = readFileSync(path as string).toString();
+
+  // return content as a secret
+  if (options?.secret) {
+    return new Secret(strContent);
+  }
+
+  return strContent;
+};
+
 // default application's config
 const configParser: ConfigParser = {
   /**
    * Parse the config's param `environment`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
-   * @returns { } parsed param's value
+   * @returns {Environment} parsed param's value
    */
   environment: (name: string, value?: string): Environment => {
     // if empty use default value
@@ -67,18 +158,21 @@ const configParser: ConfigParser = {
     return value as Environment;
   },
   /**
+   * Parse the config's param `host`
+   * @param {string} name param's name
+   * @param {string | undefined} value param's value
+   * @returns {string} parsed param's value
+   */
+  host: (name: string, value?: string): string =>
+    parse(name, value, { defaultValue: "127.0.0.1" }) as string,
+  /**
    * Parse the config's param `port`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
    * @returns {number} parsed param's value
    */
-  port: (name: string, value?: string): number => {
-    return parseNumber(name, value, {
-      defaultValue: 3000,
-      minValue: 0,
-      maxValue: 65536,
-    });
-  },
+  port: (name: string, value?: string): number =>
+    parseNumber(name, value, { defaultValue: 3000, minValue: 0, maxValue: 65536 }),
   /**
    * Parse the config's param `awsProfile`
    * @param {string} name param's name
@@ -86,13 +180,7 @@ const configParser: ConfigParser = {
    * @throws {CheckError} if value is empty
    * @returns {string} parsed param's value
    */
-  awsProfile: (name: string, value?: string): string => {
-    // if empty generate an exception
-    if (!value) {
-      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
-    }
-    return value;
-  },
+  awsProfile: (name: string, value?: string): string => parseRequired(name, value) as string,
   /**
    * Parse the config's param `awsRegion`
    * @param {string} name param's name
@@ -100,13 +188,7 @@ const configParser: ConfigParser = {
    * @throws {CheckError} if value is empty
    * @returns {string} parsed param's value
    */
-  awsRegion: (name: string, value?: string): string => {
-    // if empty generate an exception
-    if (!value) {
-      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
-    }
-    return value;
-  },
+  awsRegion: (name: string, value?: string): string => parseRequired(name, value) as string,
   /**
    * Parse the config's param `jwtAlgorithm`
    * @param {string} name param's name
@@ -161,76 +243,18 @@ const configParser: ConfigParser = {
    * Parse the config's param `jwtPublicKey`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
-   * @returns {string} parsed param's value
+   * @returns {Secret} parsed param's value
    */
-  jwtPublicKey: (name: string, value?: string): string => {
-    const defaultValue = "./config/keys/public.pem";
-
-    // if empty use default value
-    if (!value) {
-      console.warn(
-        `Cannot parse "${name}" param: value is empty. Will be used the default value (content of file ${defaultValue})`,
-      );
-      return readFileSync(defaultValue).toString();
-    }
-
-    // if file not exists use default value
-    if (!existsSync(value)) {
-      console.warn(
-        `Cannot parse "${name}" param: path not exists. Will be used default value (content of file ${defaultValue})`,
-      );
-      return readFileSync(defaultValue).toString();
-    }
-
-    // if file isn't readable use default value
-    try {
-      accessSync(value, constants.R_OK);
-    } catch {
-      console.warn(
-        `Cannot parse "${name}" param: path is not readable. Will be used default value (content of file ${defaultValue})`,
-      );
-      return readFileSync(defaultValue).toString();
-    }
-
-    return readFileSync(defaultValue).toString();
-  },
+  jwtPublicKey: (name: string, value?: string): Secret =>
+    parseFile(name, value, { defaultValue: "./config/keys/public.pem", secret: true }) as Secret,
   /**
    * Parse the config's param `jwtPrivateKey`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
    * @returns {string} parsed param's value
    */
-  jwtPrivateKey: (name: string, value?: string): string => {
-    const defaultValue = "./config/keys/private.pem";
-
-    // if empty use default value
-    if (!value) {
-      console.warn(
-        `Cannot parse "${name}" param: value is empty. Will be used the default value (content of file ${defaultValue})`,
-      );
-      return readFileSync(defaultValue).toString();
-    }
-
-    // if file not exists use default value
-    if (!existsSync(value)) {
-      console.warn(
-        `Cannot parse "${name}" param: path not exists. Will be used default value (content of file ${defaultValue})`,
-      );
-      return readFileSync(defaultValue).toString();
-    }
-
-    // if file isn't readable use default value
-    try {
-      accessSync(value, constants.R_OK);
-    } catch {
-      console.warn(
-        `Cannot parse "${name}" param: path is not readable. Will be used default value (content of file ${defaultValue})`,
-      );
-      return readFileSync(defaultValue).toString();
-    }
-
-    return readFileSync(defaultValue).toString();
-  },
+  jwtPrivateKey: (name: string, value?: string): Secret =>
+    parseFile(name, value, { defaultValue: "./config/keys/private.pem", secret: true }) as Secret,
   /**
    * Parse the config's param `redisHost`
    * @param {string} name param's name
@@ -238,78 +262,48 @@ const configParser: ConfigParser = {
    * @throws {CheckError} if value is empty
    * @returns {string} parsed param's value
    */
-  redisHost: (name: string, value?: string): string => {
-    // if empty generate an exception
-    if (!value) {
-      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
-    }
-    return value;
-  },
+  redisHost: (name: string, value?: string): string =>
+    parse(name, value, { defaultValue: "127.0.0.1" }) as string,
   /**
    * Parse the config's param `redisPort`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
    * @returns {number} parsed param's value
    */
-  redisPort: (name: string, value?: string): number => {
-    return parseNumber(name, value, {
-      defaultValue: 6379,
-      minValue: 0,
-      maxValue: 65536,
-    });
-  },
+  redisPort: (name: string, value?: string): number =>
+    parseNumber(name, value, { defaultValue: 6379, minValue: 0, maxValue: 65536 }),
   /**
    * Parse the config's param `redisUser`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
-   * @throws {CheckError} if value is empty
-   * @returns {string} parsed param's value
+   * @returns {string | undefined} parsed param's value
    */
-  redisUser: (name: string, value?: string): string => {
-    // if empty generate an exception
-    if (!value) {
-      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
-    }
-    return value;
-  },
+  redisUser: (name: string, value?: string): string | undefined =>
+    parse(name, value, { defaultValue: undefined }) as string | undefined,
   /**
    * Parse the config's param `redisPassword`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
-   * @throws {CheckError} if value is empty
-   * @returns {string} parsed param's value
+   * @returns {Secret} parsed param's value
    */
-  redisPassword: (name: string, value?: string): string => {
-    // if empty generate an exception
-    if (!value) {
-      throw new CheckError(`Param "${name}" is required and cannot be empty.`);
-    }
-    return value;
-  },
+  redisPassword: (name: string, value?: string): Secret =>
+    new Secret(parse(name, value, { defaultValue: undefined }) as string | undefined),
   /**
    * Parse the config's param `urlsPerDay`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
    * @returns {number} parsed param's value
    */
-  urlsPerDay: (name: string, value?: string) => {
-    return parseNumber(name, value, {
-      defaultValue: 10,
-      minValue: 0,
-    });
-  },
+  urlsPerDay: (name: string, value?: string): number =>
+    parseNumber(name, value, { defaultValue: 5, minValue: 0 }),
   /**
    * Parse the config's param `urlsPerDayLogged`
    * @param {string} name param's name
    * @param {string | undefined} value param's value
    * @returns {number} parsed param's value
    */
-  urlsPerDayLogged: (name: string, value?: string) => {
-    return parseNumber(name, value, {
-      defaultValue: 10,
-      minValue: 0,
-    });
-  },
+  urlsPerDayLogged: (name: string, value?: string): number =>
+    parseNumber(name, value, { defaultValue: 20, minValue: 0 }),
 };
 
 // application's config
@@ -317,6 +311,7 @@ export const config: Config = {
   // environment
   environment: configParser.environment("ENVIRONMENT", process.env.ENVIRONMENT),
   // server
+  host: configParser.host("HOST", process.env.HOST),
   port: configParser.port("PORT", process.env.PORT),
   // aws
   awsProfile: configParser.awsProfile("AWS_PROFILE", process.env.AWS_PROFILE),
@@ -335,11 +330,7 @@ export const config: Config = {
   ),
   // redis
   redisHost: configParser.redisHost("REDIS_HOST", process.env.REDIS_HOST),
-  redisPort: parseNumber("REDIS_PORT", process.env.REDIS_PORT, {
-    defaultValue: 6379,
-    minValue: 0,
-    maxValue: 65536,
-  }),
+  redisPort: configParser.redisPort("REDIS_PORT", process.env.REDIS_PORT),
   redisUser: configParser.redisUser("REDIS_USER", process.env.REDIS_USER),
   redisPassword: configParser.redisPassword("REDIS_PASSWORD", process.env.REDIS_PASSWORD),
   // urls
