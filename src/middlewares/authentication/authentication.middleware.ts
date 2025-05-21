@@ -60,7 +60,7 @@ export const refreshable = async (req: Request, _: Response, next: NextFunction)
       if (!req.body) {
         req.body = {};
       }
-      req.body.__user = jwt.verify(refreshToken, config.jwtPublicKey);
+      req.body.__user = jwt.verify(refreshToken, config.jwtPublicKey.value);
     } catch (err) {
       throw new AuthenticationError([], [(err as Error).toString()]);
     }

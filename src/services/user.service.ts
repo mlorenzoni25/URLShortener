@@ -128,7 +128,7 @@ const generateAccessToken = (
   sub: string,
   payload: string | object,
 ): string => {
-  return jwt.sign(payload, config.jwtPrivateKey, {
+  return jwt.sign(payload, config.jwtPrivateKey.value, {
     algorithm: config.jwtAlgorithm as Algorithm,
     audience: aud,
     issuer: iss,
@@ -147,7 +147,7 @@ const generateAccessToken = (
  * @returns {string} refresh token
  */
 const generateRefreshToken = (iss: string, sub: string, payload: string | object): string => {
-  return jwt.sign(payload, config.jwtPrivateKey, {
+  return jwt.sign(payload, config.jwtPrivateKey.value, {
     algorithm: config.jwtAlgorithm,
     issuer: iss,
     subject: sub,
