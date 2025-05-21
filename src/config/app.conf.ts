@@ -97,7 +97,7 @@ const parseNumber = (name: string, value?: string, options?: ParseNumberOptions)
  * @param {string | undefined} value param's value
  * @param {ParseNumberOptions | undefined} options parsing options
  * @throws {CheckError} if param is required and the value is empty
- * @returns {number} parsed value or default
+ * @returns {Secret | string} parsed value or default
  */
 const parseFile = (name: string, value?: string, options?: ParseFileOptions): Secret | string => {
   // path to read
@@ -287,7 +287,7 @@ const configParser: ConfigParser = {
    * @returns {Secret} parsed param's value
    */
   redisPassword: (name: string, value?: string): Secret =>
-    new Secret(parse(name, value, { defaultValue: undefined }) as string | undefined),
+    new Secret(parse(name, value, { defaultValue: undefined }) as string),
   /**
    * Parse the config's param `urlsPerDay`
    * @param {string} name param's name
@@ -347,3 +347,9 @@ export const config: Config = {
  */
 export const isProduction = (): boolean =>
   [Environment.PROD, Environment.PRODUCTION].includes(config.environment);
+
+/**
+ * Gets a boolean flag for test environment
+ * @returns {boolean} `true` if is a test environment, `false` otherwise
+ */
+export const isTest = (): boolean => config.environment === Environment.TEST;
