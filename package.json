@@ -16,7 +16,8 @@
     "lint-staged": "lint-staged",
     "prepare": "husky",
     "prod": "tsx --watch --env-file .env.production src/index.ts",
-    "prod:cron:populate-url-cache": "tsx --env-file .env.production scripts/cron/url-cache.ts"
+    "prod:cron:populate-url-cache": "tsx --env-file .env.production scripts/cron/url-cache.ts",
+    "test": "node --env-file=.env.test node_modules/.bin/jest"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.788.0",
