@@ -48,5 +48,5 @@ export const verifyJWT = (token: string): string | jwt.JwtPayload => {
   const accessToken = cleanAuthToken(token, "Bearer");
 
   // verify a token
-  return jwt.verify(accessToken, config.jwtPublicKey);
+  return jwt.verify(accessToken, config.jwtPublicKey.value);
 };

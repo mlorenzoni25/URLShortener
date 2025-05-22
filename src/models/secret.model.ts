@@ -4,14 +4,14 @@ export class Secret {
   /**
    * Secret content
    */
-  public readonly value: string | undefined;
+  public readonly value: string = "";
 
   /**
    * Constructor
    * @param {string} value secret
    * @returns {Readonly<Secret>} an instance in readonly mode of this class
    */
-  constructor(value: string | undefined) {
+  constructor(value: string) {
     this.value = value;
     return Object.freeze(this);
   }

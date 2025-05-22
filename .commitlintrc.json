@@ -13,7 +13,8 @@
       "REFACTOR",
       "REVERT",
       "STYLE",
-      "TEST"
+      "TEST",
+      "MERGE"
     ]],
     "type-case": [2, "always", ["uppercase", "upper-case"]],
     "type-empty": [2, "never"],
