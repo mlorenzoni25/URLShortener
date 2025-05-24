@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../src/app.js";
-import { closeConnection } from "../src/redis.js";
 import { CreateShortenedURLRequest } from "../src/schema/url.schema.js";
+import { URL_DURATION, URL_PASSWORD } from "./utils/constants.js";
 
 describe("POST /api/url", () => {
   it("Should create a simple shortened URL", async () => {
@@ -18,18 +18,24 @@ describe("POST /api/url", () => {
 
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty(["data", "shortenedUrl"]);
-  });
-});
+    expect(typeof res.body.data.shortenedId).toBe("string");
+    expect(res.body.data.shortenedId).not.toHaveLength(0);
 
-describe("POST /api/url", () => {
-  it("Should create a simple shortened URL fully customized", async () => {
+    const res2 = await request(app)
+      .post(`/${res.body.data.shortenedId}`)
+      .set("Accept", "application/json");
+
+    expect(res2.status).toEqual(302);
+  });
+
+  it("Should create a fully customized shortened URL", async () => {
     // request object
     const requestData: CreateShortenedURLRequest = {
       url: "https://expressjs.com/",
       maxUses: 50,
-      password: "!_abcDEF_4554_FEDcba_!",
+      password: URL_PASSWORD,
       validFrom: Date.now(),
-      validTo: Date.now() + 86400000,
+      validTo: Date.now() + URL_DURATION,
     };
 
     // simulate the client's request
@@ -40,9 +46,11 @@ describe("POST /api/url", () => {
 
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty(["data", "shortenedId"]);
+    expect(typeof res.body.data.shortenedId).toBe("string");
+    expect(res.body.data.shortenedId).not.toHaveLength(0);
 
     const requestData2 = {
-      password: "!_abcDEF_4554_FEDcba_!",
+      password: URL_PASSWORD,
     };
 
     const res2 = await request(app)
@@ -52,8 +60,4 @@ describe("POST /api/url", () => {
 
     expect(res2.status).toEqual(302);
   });
-});
-
-afterAll(async () => {
-  closeConnection();
 });
