@@ -1,7 +1,12 @@
 import type { Config } from "jest";
 
 const config: Config = {
+  extensionsToTreatAsEsm: [".ts"],
+  moduleNameMapper: {
+    "^(\\.{1,2}/.*)\\.js$": "$1",
+  },
   preset: "ts-jest/presets/default-esm",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   testEnvironment: "node",
   transform: {
     "^.+\\.tsx?$": [
@@ -25,10 +30,6 @@ const config: Config = {
         },
       },
     ],
-  },
-  extensionsToTreatAsEsm: [".ts"],
-  moduleNameMapper: {
-    "^(\\.{1,2}/.*)\\.js$": "$1",
   },
 };
 
