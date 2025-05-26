@@ -41,7 +41,7 @@ export const testConf: LoggerOptions = {
 // config for production env
 export const prodConf: LoggerOptions = {
   transport: {
-    target: path.join(LOGGER.BASE_DIRECTORY_TRANSPORTS, "logger-transport-production.conf"),
+    target: path.join(LOGGER.BASE_DIRECTORY_TRANSPORTS, "logger-transport-production.conf.js"),
     options: {
       mkdir: true,
       sync: true,
