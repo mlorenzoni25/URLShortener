@@ -165,7 +165,7 @@ const getURLFromCache = async (shortenedId: string): Promise<URLItem | null> => 
 const canBeUsed = async (url: URLItem, password?: string): Promise<boolean> => {
   // check if is temporal valid
   const { minDateError, maxDateError } = DateHelper.isBetween(
-    new Date(),
+    Date.now(),
     url.validFrom,
     url.validTo,
     true,

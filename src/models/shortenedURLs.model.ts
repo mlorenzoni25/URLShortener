@@ -11,8 +11,8 @@ export interface URLItem extends Item {
   maxUses: number;
   password: string;
   url: string;
-  validFrom: string;
-  validTo: string;
+  validFrom: number;
+  validTo: number;
   createdAt?: string;
   updatedAt?: string;
 }

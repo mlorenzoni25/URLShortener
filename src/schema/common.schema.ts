@@ -28,6 +28,7 @@ export const milliTimestampSchema = z
   .number()
   .int()
   .positive()
-  .refine((value: number) => value.toString().length === 13, {
-    message: "Timestamp must be an integer value of 13 digits",
-  });
+  .refine(
+    (value: number) => value.toString().length === 13,
+    "Timestamp must be an integer value of 13 digits",
+  );
