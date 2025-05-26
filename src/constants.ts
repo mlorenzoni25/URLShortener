@@ -48,8 +48,6 @@ export const JWT = {
 export const LOGGER = {
   // directory where store log's files
   BASE_DIRECTORY: path.join(SRC_DIRECTORY, "..", "logs"),
-  // directory where are stored transports files
-  BASE_DIRECTORY_TRANSPORTS: path.join(SRC_DIRECTORY, "config", "logger-transport"),
 };
 
 // cache
