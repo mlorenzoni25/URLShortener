@@ -33,7 +33,7 @@ type ParseFileOptions = ParseOptions & {
  */
 const parse = (name: string, value?: string, options?: ParseOptions): unknown => {
   if (!value) {
-    console.warn(
+    console.info(
       `Cannot parse "${name}" param: value is empty. Will be used default value (${options?.defaultValue || undefined})`,
     );
     return options?.defaultValue || undefined;
@@ -76,7 +76,7 @@ const parseNumber = (name: string, value?: string, options?: ParseNumberOptions)
     if (!defaultValue) {
       throw new CheckError(`Param "${name}" is required and cannot be empty.`);
     }
-    console.warn(`Cannot parse "${name}" param, will be used default value (${defaultValue})`);
+    console.info(`Cannot parse "${name}" param, will be used default value (${defaultValue})`);
     return defaultValue;
   }
 
@@ -105,12 +105,12 @@ const parseFile = (name: string, value?: string, options?: ParseFileOptions): Se
 
   // if empty use default value
   if (!value) {
-    console.warn(
+    console.info(
       `Cannot parse "${name}" param: value is empty. Will be used the default value (content of file ${options?.defaultValue})`,
     );
   } else if (!existsSync(value)) {
     // if file not exists use default value
-    console.warn(
+    console.info(
       `Cannot parse "${name}" param: path not exists. Will be used default value (content of file ${options?.defaultValue})`,
     );
   } else {
@@ -121,7 +121,7 @@ const parseFile = (name: string, value?: string, options?: ParseFileOptions): Se
   try {
     accessSync(path as string, constants.R_OK);
   } catch {
-    console.warn(
+    console.info(
       `Cannot parse "${name}" param: path is not readable. Will be used default value (content of file ${options?.defaultValue})`,
     );
     return readFileSync(options?.defaultValue as string).toString();
@@ -149,7 +149,7 @@ const configParser: ConfigParser = {
   environment: (name: string, value?: string): Environment => {
     // if empty use default value
     if (!value || !Object.values(Environment).includes(value as Environment)) {
-      console.warn(
+      console.info(
         `Cannot parse "${name}" param, will be used default value (${Environment.PRODUCTION})`,
       );
       return Environment.PRODUCTION;
@@ -198,7 +198,7 @@ const configParser: ConfigParser = {
   jwtAlgorithm: (name: string, value?: string): Algorithm => {
     // if empty use default value
     if (!value || !JWT.ALGORITHMS.includes(value)) {
-      console.warn(`Cannot parse "${name}" param, will be used default value (ES256)`);
+      console.info(`Cannot parse "${name}" param, will be used default value (ES256)`);
       return "ES256";
     }
     return value as Algorithm;
@@ -212,7 +212,7 @@ const configParser: ConfigParser = {
   jwtAccessExpiry: (name: string, value?: string): number | StringValue => {
     // if empty use default value
     if (!value) {
-      console.warn(`Cannot parse "${name}" param, will be used default value (15minutes)`);
+      console.info(`Cannot parse "${name}" param, will be used default value (15minutes)`);
       return "15minutes";
     }
     const numericValue = Number(value);
@@ -230,7 +230,7 @@ const configParser: ConfigParser = {
   jwtRefreshExpiry: (name: string, value?: string): number | StringValue => {
     // if empty use default value
     if (!value) {
-      console.warn(`Cannot parse "${name}" param, will be used default value (1day)`);
+      console.info(`Cannot parse "${name}" param, will be used default value (1day)`);
       return "1day";
     }
     const numericValue = Number(value);
