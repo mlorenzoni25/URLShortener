@@ -23,59 +23,21 @@ export const devConf: LoggerOptions = {
 // config for test env
 export const testConf: LoggerOptions = {
   transport: {
-    targets: [
-      {
-        target: "pino/file",
-        level: "debug",
-        options: {
-          destination: path.join(LOGGER.BASE_DIRECTORY, "url-shortener.log"),
-          mkdir: true,
-          sync: false,
-        },
-      },
-      {
-        target: "pino/file",
-        level: "debug",
-        options: {
-          destination: path.join(LOGGER.BASE_DIRECTORY, "url-shortener.err.log"),
-          mkdir: true,
-          sync: false,
-        },
-      },
-    ],
+    target: path.join(LOGGER.BASE_DIRECTORY_TRANSPORTS, "logger-transport-test.conf.cjs"),
+    options: {
+      mkdir: true,
+      sync: true,
+    },
   },
-  level: "debug",
-  timestamp: (): string => `,"timestamp":"${new Date().toISOString()}"`,
-  // Removed the formatters since they're not compatible with transport targets
-  messageKey: "message",
 };
 
 // config for production env
 export const prodConf: LoggerOptions = {
   transport: {
-    targets: [
-      {
-        target: "pino/file",
-        level: "info",
-        options: {
-          destination: path.join(LOGGER.BASE_DIRECTORY, "url-shortener.log"),
-          mkdir: true,
-          sync: false,
-        },
-      },
-      {
-        target: "pino/file",
-        level: "warn",
-        options: {
-          destination: path.join(LOGGER.BASE_DIRECTORY, "url-shortener.err.log"),
-          mkdir: true,
-          sync: false,
-        },
-      },
-    ],
+    target: path.join(LOGGER.BASE_DIRECTORY_TRANSPORTS, "logger-transport-production.conf.cjs"),
+    options: {
+      mkdir: true,
+      sync: true,
+    },
   },
-  level: "info",
-  timestamp: (): string => `,"timestamp":"${new Date().toISOString()}"`,
-  // Removed the formatters since they're not compatible with transport targets
-  messageKey: "message",
 };
