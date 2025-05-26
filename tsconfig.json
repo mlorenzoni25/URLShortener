@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2024",
+    "esModuleInterop": true,
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "esModuleInterop": true,
+    "outDir": "./dist",
+    "rootDir": "./",
     "skipLibCheck": true,
     "strict": true,
-    "types": ["jest"],
-    "outDir": "./dist",
-    "rootDir": "./"
+    "target": "ES2024",
+    "types": ["jest"]
   },
-  "include": ["**/*.ts", "src/config/logger-transport/*.conf.cjs"],
-  "exclude": ["dist"]
+  "exclude": ["dist", "test"],
+  "include": ["src/**/*.ts", "src/**/*.cjs", "src/config/logger-transport/logger-transport.conf.js"]
 }

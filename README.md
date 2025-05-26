@@ -122,8 +122,6 @@ URLS_PER_DAY_LOGGED=20
 npm run dev
 ```
 
-You’re ready to start testing the API with Postman or any other client ⚡
-
 ---
 
 ### 8. Enable URL Cache
