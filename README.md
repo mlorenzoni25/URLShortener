@@ -9,12 +9,14 @@ A robust URL shortening service built with Node.js, Express, TypeScript, and AWS
 - **Rate Limiting**: Different request limits for authenticated and anonymous users
 - **Caching**: Redis implementation for frequently accessed URLs
 - **Security Focused**: Built with security best practices
+- **Testing**: API tests using Jest
 
 ## 🛠️ Tech Stack
 
 - **Backend**: Node.js, Express, TypeScript
 - **Database**: AWS DynamoDB
 - **Caching & Rate Limiting**: Redis
+- **Testing**: Jest
 - **Version Control**: GitHub
 - **Code Quality Tools**: ESLint, Prettier
 
@@ -171,4 +173,4 @@ MIT License
 
 ---
 
-Created by Michele Lorenzoni (https://github.com/mlorenzoni25) - Feel free to reach out with any questions!
+Created by Michele Lorenzoni ([https://github.com/mlorenzoni25](https://github.com/mlorenzoni25)) - Feel free to reach out with any questions!
