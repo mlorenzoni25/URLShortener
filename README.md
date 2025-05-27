@@ -20,7 +20,7 @@ A robust URL shortening service built with Node.js, Express, TypeScript, and AWS
 - **Version Control**: GitHub
 - **Code Quality Tools**: ESLint, Prettier
 
-## 🔧 Setup and Installation
+## 🔧 Setup and Installation (Development Environment)
 
 1. Clone the repository
 
@@ -116,7 +116,7 @@ URLS_PER_DAY_LOGGED=20
 
 ---
 
-### 7. Start the project
+### 7. Start the project (Development)
 
 ```bash
 npm run dev
@@ -124,11 +124,30 @@ npm run dev
 
 ---
 
+## 📦 Production Build
+
+1. Build the project:
+
+```bash
+npm run clean
+npm run build
+```
+
+2. Start in production mode:
+
+```bash
+npm run start
+```
+
+3. Ensure you are using the correct environment file (e.g., `.env.production`).
+
+---
+
 ### 8. Enable URL Cache
 
 To enable caching of frequently accessed URLs, schedule the script `./src/scripts/cron/url-cache.ts` to run periodically using cron (e.g., once per day). This helps keep the cache warm and improves response performance.
 
-### 📦 Upcoming Features
+## 📦 Upcoming Features
 
 - Docker support for easier deployment
 - Optional MongoDB compatibility alongside DynamoDB
