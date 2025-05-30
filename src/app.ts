@@ -86,7 +86,11 @@ app.use(errorHandler);
 
 // close the connection when application receives SIGINT signal
 process.on("SIGINT", async () => {
+  // close redis connection
   await closeConnection();
+
+  // exit from the process
+  process.exit(0);
 });
 
 export default app;

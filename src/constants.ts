@@ -1,8 +1,9 @@
 import path from "path";
 import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// current project directory
+const SRC_DIRECTORY =
+  typeof __dirname === "string" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
 // charset
 export const CHARSET = {
@@ -46,7 +47,9 @@ export const JWT = {
 // logger
 export const LOGGER = {
   // directory where store log's files
-  BASE_DIRECTORY: path.join(__dirname, "..", "logs"),
+  BASE_DIRECTORY: path.join(SRC_DIRECTORY, "..", "logs"),
+  // directory where store transport's files
+  BASE_DIRECTORY_TRANSPORTS: path.join(SRC_DIRECTORY, "config", "logger-transport"),
 };
 
 // cache

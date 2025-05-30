@@ -17,35 +17,34 @@ export const devConf: LoggerOptions = {
       },
     ],
   },
+  level: "trace",
+};
+
+// config for test env
+export const testConf: LoggerOptions = {
+  transport: {
+    targets: [
+      {
+        target: "pino-pretty",
+        level: "debug",
+        options: {
+          colorize: true,
+          levelFirst: true,
+          translateTime: "SYS:standard",
+        },
+      },
+    ],
+  },
   level: "debug",
 };
 
 // config for production env
 export const prodConf: LoggerOptions = {
   transport: {
-    targets: [
-      {
-        target: "pino/file",
-        level: "info",
-        options: {
-          destination: path.join(LOGGER.BASE_DIRECTORY, "url-shortener.log"),
-          mkdir: true,
-          sync: false,
-        },
-      },
-      {
-        target: "pino/file",
-        level: "warn",
-        options: {
-          destination: path.join(LOGGER.BASE_DIRECTORY, "url-shortener.err.log"),
-          mkdir: true,
-          sync: false,
-        },
-      },
-    ],
+    target: path.join(LOGGER.BASE_DIRECTORY_TRANSPORTS, "logger-transport-production.conf.js"),
+    options: {
+      mkdir: true,
+      sync: true,
+    },
   },
-  level: "info",
-  timestamp: (): string => `,"timestamp":"${new Date().toISOString()}"`,
-  // Removed the formatters since they're not compatible with transport targets
-  messageKey: "message",
 };

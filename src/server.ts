@@ -1,10 +1,13 @@
 import app from "./app.js";
 import { config } from "./config/app.conf.js";
 
-app.listen(config.port, () => {
+app.listen(config.port, config.host, () => {
   // eslint-disable-next-line no-console
   console.log(
-    `🚀 Server running on http://localhost:${config.port} with this config`,
-    JSON.stringify(config, null, 2),
+    `
+🚀 LET’S GO!
+
+🌐 Server running at: http://${config.host}:${config.port}. The config is:`,
+    config,
   );
 });

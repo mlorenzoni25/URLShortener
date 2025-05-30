@@ -16,7 +16,7 @@ import { CreateShortenedURLRequest, RedirectToRequest } from "../schema/url.sche
  */
 export const createShortenedURL = async (
   data: CreateShortenedURLRequest,
-): Promise<{ shortenedUrl: string }> => {
+): Promise<{ shortenedId: string; shortenedUrl: string }> => {
   // choose the right callback to generate the shortened id
   const shortenedIdGenerator = data.alias
     ? generateShortenedIdFromAlias(data.alias)
@@ -31,7 +31,10 @@ export const createShortenedURL = async (
   // register the url's information on database
   await item.save();
 
-  return { shortenedUrl: `http://localhost:3000/${item.shortenedId}` };
+  return {
+    shortenedId: item.shortenedId,
+    shortenedUrl: `http://localhost:3000/${item.shortenedId}`,
+  };
 };
 
 /**
@@ -162,7 +165,7 @@ const getURLFromCache = async (shortenedId: string): Promise<URLItem | null> => 
 const canBeUsed = async (url: URLItem, password?: string): Promise<boolean> => {
   // check if is temporal valid
   const { minDateError, maxDateError } = DateHelper.isBetween(
-    new Date(),
+    Date.now(),
     url.validFrom,
     url.validTo,
     true,

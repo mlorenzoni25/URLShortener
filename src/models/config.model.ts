@@ -1,5 +1,6 @@
 import { Algorithm } from "jsonwebtoken";
 import type { StringValue } from "ms";
+import { Secret } from "./secret.model.js";
 
 // enumerates application's environments
 export enum Environment {
@@ -25,6 +26,10 @@ export type Config = {
    * Current environment
    */
   environment: Environment;
+  /**
+   * Server host
+   */
+  host: string;
   /**
    * Server port
    */
@@ -52,11 +57,11 @@ export type Config = {
   /**
    * JWT public key
    */
-  jwtPublicKey: string;
+  jwtPublicKey: Secret;
   /**
    * JWT private key
    */
-  jwtPrivateKey: string;
+  jwtPrivateKey: Secret;
   /**
    * Host to access Redis DB
    */
@@ -68,11 +73,11 @@ export type Config = {
   /**
    * User to access Redis DB
    */
-  redisUser: string;
+  redisUser?: string;
   /**
    * Password to access Redis DB
    */
-  redisPassword: string;
+  redisPassword?: Secret;
   /**
    * Limit number of url's generations
    */
@@ -92,5 +97,5 @@ export type ConfigParser = {
    * @returns {Config[K]} parsed value or default
    */
   // eslint-disable-next-line no-unused-vars
-  [K in keyof Config]: (name: string, value?: string) => Config[K];
+  [K in keyof Required<Config>]: (name: string, value?: string) => Config[K];
 };

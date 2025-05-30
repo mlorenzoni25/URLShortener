@@ -9,21 +9,23 @@ A robust URL shortening service built with Node.js, Express, TypeScript, and AWS
 - **Rate Limiting**: Different request limits for authenticated and anonymous users
 - **Caching**: Redis implementation for frequently accessed URLs
 - **Security Focused**: Built with security best practices
+- **Testing**: API tests using Jest
 
 ## 🛠️ Tech Stack
 
 - **Backend**: Node.js, Express, TypeScript
 - **Database**: AWS DynamoDB
 - **Caching & Rate Limiting**: Redis
+- **Testing**: Jest
 - **Version Control**: GitHub
 - **Code Quality Tools**: ESLint, Prettier
 
-## 🔧 Setup and Installation
+## 🔧 Setup and Installation (Development Environment)
 
 1. Clone the repository
 
 ```bash
-git clone https://github.com/<username>/URLShortener.git
+git clone https://github.com/mlorenzoni25/URLShortener.git
 cd URLShortener
 ```
 
@@ -114,13 +116,30 @@ URLS_PER_DAY_LOGGED=20
 
 ---
 
-### 7. Start the project
+### 7. Start the project (Development)
 
 ```bash
 npm run dev
 ```
 
-You’re ready to start testing the API with Postman or any other client ⚡
+---
+
+## 📦 Production Build
+
+1. Build the project:
+
+```bash
+npm run clean
+npm run build
+```
+
+2. Start in production mode:
+
+```bash
+npm run start
+```
+
+3. Ensure you are using the correct environment file (e.g., `.env.production`).
 
 ---
 
@@ -128,7 +147,7 @@ You’re ready to start testing the API with Postman or any other client ⚡
 
 To enable caching of frequently accessed URLs, schedule the script `./src/scripts/cron/url-cache.ts` to run periodically using cron (e.g., once per day). This helps keep the cache warm and improves response performance.
 
-### 📦 Upcoming Features
+## 📦 Upcoming Features
 
 - Docker support for easier deployment
 - Optional MongoDB compatibility alongside DynamoDB
@@ -171,4 +190,4 @@ MIT License
 
 ---
 
-Created by Michele Lorenzoni (https://github.com/mlorenzoni25) - Feel free to reach out with any questions!
+Created by Michele Lorenzoni ([https://github.com/mlorenzoni25](https://github.com/mlorenzoni25)) - Feel free to reach out with any questions!
