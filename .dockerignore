@@ -2,12 +2,12 @@
 .private/
 .vscode/
 config/
+dist/
 logs/
 node_modules/
 public/
 .commitlintrc.json
 .dockerignore
-.env*
 .gitignore
 .lintstagedrc.json
 .prettierignore

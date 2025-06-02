@@ -1,0 +1,8 @@
+services:
+  app:
+    build:
+      context: .
+      target: dev
+    command: npm run dev
+    env_file:
+      - .env
