@@ -25,7 +25,7 @@ A robust URL shortening service built with Node.js, Express, TypeScript, and AWS
 1. Clone the repository
 
 ```bash
-git clone https://github.com/<username>/URLShortener.git
+git clone https://github.com/mlorenzoni25/URLShortener.git
 cd URLShortener
 ```
 
@@ -149,7 +149,6 @@ To enable caching of frequently accessed URLs, schedule the script `./src/script
 
 ## 📦 Upcoming Features
 
-- Docker support for easier deployment
 - Optional MongoDB compatibility alongside DynamoDB
 
 ## 💻 Development Tools
