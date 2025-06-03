@@ -149,7 +149,6 @@ To enable caching of frequently accessed URLs, schedule the script `./src/script
 
 ## 📦 Upcoming Features
 
-- Docker support for easier deployment
 - Optional MongoDB compatibility alongside DynamoDB
 
 ## 💻 Development Tools
